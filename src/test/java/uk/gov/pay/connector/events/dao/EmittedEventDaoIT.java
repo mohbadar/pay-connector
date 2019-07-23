@@ -85,7 +85,7 @@ public class EmittedEventDaoIT extends DaoITestBase {
     private PaymentCreated aPaymentCreatedEvent() {
         PaymentCreatedEventDetails eventDetails = new PaymentCreatedEventDetails(
                 1L, "desc", "ref", "return_url",
-                100L, "someProvider", "en", false);
+                100L, "someProvider", "en", false, null);
         return new PaymentCreated("my-resource-external-id", eventDetails, ZonedDateTime.parse("2019-01-01T14:00:00Z"));
     }
 }

@@ -11,6 +11,8 @@ import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.runner.RunWith;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+import uk.gov.pay.commons.model.charge.ExternalMetadata;
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils;
 import uk.gov.pay.connector.charge.model.domain.ChargeEntity;
 import uk.gov.pay.connector.chargeevent.model.domain.ChargeEventEntity;
@@ -48,6 +50,7 @@ public class QueueMessageContractTest {
     @PactVerifyProvider("a payment created message")
     public String verifyPaymentCreatedEvent() throws Exception {
         ChargeEntity charge = ChargeEntityFixture.aValidChargeEntity()
+                .withExternalMetadata(new ExternalMetadata(ImmutableMap.of("key", "value")))
                 .withCorporateSurcharge(55L)
                 .build();
 

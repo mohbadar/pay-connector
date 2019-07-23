@@ -2,6 +2,8 @@ package uk.gov.pay.connector.events.model.charge;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+import uk.gov.pay.commons.model.charge.ExternalMetadata;
 import uk.gov.pay.connector.charge.model.ServicePaymentReference;
 import uk.gov.pay.connector.charge.model.domain.ChargeEntity;
 import uk.gov.pay.connector.model.domain.ChargeEntityFixture;
@@ -25,6 +27,7 @@ public class PaymentCreatedTest {
             .withReturnUrl("http://example.com")
             .withAmount(100L)
             .withCorporateSurcharge(77L)
+            .withExternalMetadata(new ExternalMetadata(ImmutableMap.of("key1", "value1", "key2", "value2")))
             .build();
 
     private final PaymentCreated paymentCreatedEvent = PaymentCreated.from(chargeEntity);
@@ -66,5 +69,6 @@ public class PaymentCreatedTest {
         assertThat(actual, hasJsonPath("$.event_details.payment_provider", equalTo(chargeEntity.getGatewayAccount().getGatewayName())));
         assertThat(actual, hasJsonPath("$.event_details.language", equalTo(chargeEntity.getLanguage().toString())));
         assertThat(actual, hasJsonPath("$.event_details.delayed_capture", equalTo(chargeEntity.isDelayedCapture())));
+        assertThat(actual, hasJsonPath("$.event_details.external_metadata", equalTo("{\"key1\":\"value1\",\"key2\":\"value2\"}")));
     }
 }
