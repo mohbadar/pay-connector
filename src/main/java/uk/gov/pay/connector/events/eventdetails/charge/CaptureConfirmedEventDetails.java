@@ -10,11 +10,15 @@ import java.time.ZonedDateTime;
 public class CaptureConfirmedEventDetails extends EventDetails {
     @JsonSerialize(using = MicrosecondPrecisionDateTimeSerializer.class)
     private final ZonedDateTime gatewayEventDate;
+    @JsonSerialize(using = MicrosecondPrecisionDateTimeSerializer.class)
+    private final ZonedDateTime capturedDate;
     private final Long fee;
     private final Long netAmount;
 
-    private CaptureConfirmedEventDetails(ZonedDateTime gatewayEventDate, Long fee, Long netAmount) {
+
+    public CaptureConfirmedEventDetails(ZonedDateTime gatewayEventDate, ZonedDateTime capturedDate, Long fee, Long netAmount) {
         this.gatewayEventDate = gatewayEventDate;
+        this.capturedDate = capturedDate;
         this.fee = fee;
         this.netAmount = netAmount;
     }
@@ -22,9 +26,14 @@ public class CaptureConfirmedEventDetails extends EventDetails {
     public static CaptureConfirmedEventDetails from(ChargeEventEntity chargeEvent) {
         return new CaptureConfirmedEventDetails(
                 chargeEvent.getGatewayEventDate().orElse(null),
+                chargeEvent.getUpdated(),
                 chargeEvent.getChargeEntity().getFeeAmount().orElse(null),
                 chargeEvent.getChargeEntity().getNetAmount().orElse(null)
         );
+    }
+
+    public ZonedDateTime getCapturedDate() {
+        return capturedDate;
     }
 
     public ZonedDateTime getGatewayEventDate() {

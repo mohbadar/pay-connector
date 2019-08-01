@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import uk.gov.pay.connector.charge.model.domain.ChargeStatus;
 import uk.gov.pay.connector.events.model.Event;
 import uk.gov.pay.connector.events.model.UnspecifiedEvent;
+import uk.gov.pay.connector.events.eventdetails.EmptyEventDetails;
 import uk.gov.pay.connector.events.model.charge.CaptureAbandonedAfterTooManyRetries;
 import uk.gov.pay.connector.events.model.charge.CaptureErrored;
 import uk.gov.pay.connector.events.model.charge.CaptureSubmitted;
@@ -77,7 +78,7 @@ public class PaymentGatewayStateTransitionsTest {
 
     @Test
     public void isValidTransition_deniesTransitionWithInvalidEvent() {
-        assertThat(PaymentGatewayStateTransitions.isValidTransition(CAPTURE_READY, CAPTURE_SUBMITTED, new CaptureSubmitted("a", ZonedDateTime.now())), is(true));
+        assertThat(PaymentGatewayStateTransitions.isValidTransition(CAPTURE_READY, CAPTURE_SUBMITTED, new CaptureSubmitted("a", new EmptyEventDetails(), ZonedDateTime.now())), is(true));
         assertThat(PaymentGatewayStateTransitions.isValidTransition(CAPTURE_READY, CAPTURE_SUBMITTED, new CaptureErrored("a", ZonedDateTime.now())), is(false));
     }
 

@@ -105,6 +105,8 @@ public class EventFactory {
                 return PaymentCreated.from(chargeEvent);
             } else if (eventClass == PaymentDetailsEntered.class) {
                 return PaymentDetailsEntered.from(chargeEvent);
+            } else if (eventClass == CaptureSubmitted.class) {
+                return CaptureSubmitted.from(chargeEvent);
             } else if (eventClass == CaptureConfirmed.class) {
                 return CaptureConfirmed.from(chargeEvent);
             } else {

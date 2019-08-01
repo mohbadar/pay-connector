@@ -23,12 +23,14 @@ public class CaptureConfirmedTest {
     @Test
     public void serializesEventDetailsGivenChargeEvent() throws JsonProcessingException {
         ZonedDateTime gatewayEventTime = ZonedDateTime.parse("2018-03-12T16:25:01.123456Z");
+        ZonedDateTime updated = ZonedDateTime.parse("2018-03-12T16:25:02.123456Z");
         Long fee = 5L;
 
         chargeEntity.withFee(fee);
         ChargeEventEntity chargeEvent = mock(ChargeEventEntity.class);
         when(chargeEvent.getChargeEntity()).thenReturn(chargeEntity.build());
         when(chargeEvent.getGatewayEventDate()).thenReturn(Optional.of(gatewayEventTime));
+        when(chargeEvent.getUpdated()).thenReturn(updated);
 
         String actual = CaptureConfirmed.from(chargeEvent).toJsonString();
 
@@ -39,6 +41,7 @@ public class CaptureConfirmedTest {
         assertThat(actual, hasJsonPath("$.event_details.gateway_event_date", equalTo("2018-03-12T16:25:01.123456Z")));
         assertThat(actual, hasJsonPath("$.event_details.fee", equalTo(5)));
         assertThat(actual, hasJsonPath("$.event_details.net_amount", equalTo(495)));
+        assertThat(actual, hasJsonPath("$.event_details.captured_date", equalTo("2018-03-12T16:25:02.123456Z")));
     }
 
     @Test
